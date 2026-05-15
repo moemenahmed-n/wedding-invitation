@@ -2,21 +2,22 @@
 const isMobile = window.matchMedia('(max-width: 540px)').matches;
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-// ---------- Falling petals ----------
-(function generatePetals() {
+// ---------- Falling flowers ----------
+(function generateFlowers() {
   if (reduceMotion) return;
   const container = document.querySelector('.petals');
-  const petalCount = isMobile ? 12 : 22;
-  for (let i = 0; i < petalCount; i++) {
+  const count = isMobile ? 28 : 55;
+  const variants = ['f1', 'f2', 'f3', 'f4', 'f5'];
+  for (let i = 0; i < count; i++) {
     const petal = document.createElement('span');
-    petal.className = 'petal';
-    const size = 8 + Math.random() * 14;
+    petal.className = 'petal ' + variants[Math.floor(Math.random() * variants.length)];
+    const size = 22 + Math.random() * 28;
     petal.style.width = size + 'px';
     petal.style.height = size + 'px';
     petal.style.left = Math.random() * 100 + 'vw';
     petal.style.animationDuration = (8 + Math.random() * 10) + 's';
-    petal.style.animationDelay = (-Math.random() * 12) + 's';
-    petal.style.opacity = (0.5 + Math.random() * 0.5).toFixed(2);
+    petal.style.animationDelay = (-Math.random() * 14) + 's';
+    petal.style.opacity = (0.75 + Math.random() * 0.25).toFixed(2);
     container.appendChild(petal);
   }
 })();
@@ -47,6 +48,7 @@ const card = document.getElementById('card');
 function openInvitation() {
   if (envelope.classList.contains('opening')) return;
   envelope.classList.add('opening');
+  document.body.classList.add('invitation-open');
   setTimeout(() => {
     envelope.classList.add('opened');
     card.setAttribute('aria-hidden', 'false');
@@ -128,26 +130,6 @@ document.getElementById('add-cal').addEventListener('click', () => {
   a.click();
   document.body.removeChild(a);
   setTimeout(() => URL.revokeObjectURL(url), 1000);
-});
-
-// ---------- Share button ----------
-document.getElementById('share-btn').addEventListener('click', async () => {
-  const shareData = {
-    title: "Mo'men & Menna's Wedding",
-    text: "You're invited to celebrate Mo'men & Menna's wedding on Friday, 29 May 2026 at 4:00 PM — Al Aly Al Azeem, Almazah.",
-    url: window.location.href
-  };
-  try {
-    if (navigator.share) {
-      await navigator.share(shareData);
-    } else {
-      await navigator.clipboard.writeText(`${shareData.text} ${shareData.url}`);
-      const btn = document.getElementById('share-btn');
-      const original = btn.innerHTML;
-      btn.innerHTML = '✓ Link copied';
-      setTimeout(() => { btn.innerHTML = original; }, 1800);
-    }
-  } catch (_) { /* user cancelled */ }
 });
 
 // ---------- Subtle parallax on device tilt (mobile) ----------
