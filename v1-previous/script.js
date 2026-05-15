@@ -6,7 +6,7 @@ const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').match
 (function generateFlowers() {
   if (reduceMotion) return;
   const container = document.querySelector('.petals');
-  const count = isMobile ? 28 : 55;
+  const count = isMobile ? 16 : 55;
   const variants = ['f1', 'f2', 'f3', 'f4', 'f5'];
   for (let i = 0; i < count; i++) {
     const petal = document.createElement('span');
@@ -26,7 +26,7 @@ const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').match
 (function generateSparkles() {
   if (reduceMotion) return;
   const container = document.querySelector('.sparkles');
-  const count = isMobile ? 14 : 28;
+  const count = isMobile ? 6 : 28;
   for (let i = 0; i < count; i++) {
     const s = document.createElement('span');
     s.className = 'sparkle';

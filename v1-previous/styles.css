@@ -41,11 +41,12 @@ body { padding: var(--safe-top) 0 var(--safe-bottom); }
   width: 60vmax;
   height: 60vmax;
   border-radius: 50%;
-  filter: blur(80px);
+  filter: blur(40px);
   opacity: 0.45;
   z-index: -2;
   pointer-events: none;
   will-change: transform;
+  transform: translateZ(0);
 }
 .bg-glow-1 {
   background: radial-gradient(circle, var(--rose-soft), transparent 60%);
@@ -96,7 +97,7 @@ body.invitation-open .sparkles { opacity: 1; }
   opacity: 0.95;
   animation: fall linear infinite;
   will-change: transform;
-  filter: drop-shadow(0 3px 5px rgba(168, 116, 99, 0.35));
+  filter: drop-shadow(0 2px 3px rgba(168, 116, 99, 0.30));
 }
 /* Five vibrant flower variants */
 .petal.f1 { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><g><circle cx='32' cy='14' r='12' fill='%23ec6b8a'/><circle cx='50' cy='32' r='12' fill='%23e85a7a'/><circle cx='32' cy='50' r='12' fill='%23ec6b8a'/><circle cx='14' cy='32' r='12' fill='%23e85a7a'/><circle cx='32' cy='32' r='8' fill='%23f5d76e'/></g></svg>"); }
@@ -138,7 +139,8 @@ body.invitation-open .sparkles { opacity: 1; }
   perspective: 900px;
   animation: envFloat 4s ease-in-out infinite;
   transition: opacity 0.6s ease, transform 0.8s ease;
-  filter: drop-shadow(0 30px 40px rgba(58,46,42,0.18));
+  box-shadow: 0 30px 40px rgba(58,46,42,0.18);
+  border-radius: 3px;
 }
 .envelope.opening { animation: none; }
 .envelope.opened {
@@ -242,9 +244,7 @@ body.invitation-open .sparkles { opacity: 1; }
   max-width: 720px;
   margin: 4vh auto;
   padding: clamp(28px, 6vw, 56px) clamp(20px, 5vw, 40px) clamp(28px, 5vw, 48px);
-  background: rgba(255, 252, 247, 0.78);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: #FFFCF7;
   border: 1px solid rgba(201, 169, 110, 0.35);
   border-radius: 12px;
   box-shadow:
@@ -429,12 +429,11 @@ body.invitation-open .sparkles { opacity: 1; }
 .map-btn {
   margin-top: 10px;
   color: var(--rose-deep);
-  background: rgba(255, 252, 247, 0.65);
+  background: rgba(255, 252, 247, 0.92);
   border: 1.5px solid var(--gold);
   box-shadow:
     0 1px 0 rgba(255,255,255,0.8) inset,
     0 6px 16px -10px rgba(58,46,42,0.4);
-  backdrop-filter: blur(4px);
 }
 .map-btn:hover {
   background: rgba(255, 252, 247, 0.95);
@@ -615,6 +614,12 @@ body.invitation-open .sparkles { opacity: 1; }
   .cd-label { font-size: 0.6rem; letter-spacing: 0.14em; }
   .map-btn, .ghost-btn { width: 100%; }
   .action-row { flex-direction: column; }
+
+  /* Mobile perf: stop animating expensive paint-bound backgrounds */
+  .bg-gradient { animation: none; background: linear-gradient(135deg, #fbf6f0, #f3e2d3); }
+  .bg-glow-1, .bg-glow-2 { animation: none; filter: blur(30px); opacity: 0.35; }
+  .petal { filter: none; }
+  .envelope { animation: none; }
 }
 
 @media (max-width: 360px) {
