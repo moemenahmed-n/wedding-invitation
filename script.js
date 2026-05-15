@@ -2,25 +2,32 @@
 const isMobile = window.matchMedia('(max-width: 540px)').matches;
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-// ---------- Falling flowers ----------
-(function generateFlowers() {
+// ---------- One-time flower shower (triggered when envelope opens) ----------
+function startFlowerShower() {
   if (reduceMotion) return;
   const container = document.querySelector('.petals');
-  const count = isMobile ? 28 : 55;
-  const variants = ['f1', 'f2', 'f3', 'f4', 'f5'];
+  if (!container || container.dataset.started) return;
+  container.dataset.started = '1';
+  const count = isMobile ? 30 : 50;
+  const variants = ['f1', 'f2', 'f3'];
+  let maxEnd = 0;
   for (let i = 0; i < count; i++) {
     const petal = document.createElement('span');
     petal.className = 'petal ' + variants[Math.floor(Math.random() * variants.length)];
-    const size = 22 + Math.random() * 28;
+    const size = 18 + Math.random() * 16;             // 18-34px — small delicate blossoms
     petal.style.width = size + 'px';
     petal.style.height = size + 'px';
     petal.style.left = Math.random() * 100 + 'vw';
-    petal.style.animationDuration = (8 + Math.random() * 10) + 's';
-    petal.style.animationDelay = (-Math.random() * 14) + 's';
-    petal.style.opacity = (0.75 + Math.random() * 0.25).toFixed(2);
+    const duration = 7 + Math.random() * 5;           // 7-12s fall — quicker shower
+    const delay = Math.random() * 3.5;                // staggered start 0-3.5s
+    petal.style.animationDuration = duration + 's';
+    petal.style.animationDelay = delay + 's';
+    maxEnd = Math.max(maxEnd, duration + delay);
     container.appendChild(petal);
   }
-})();
+  // Clean up DOM nodes after shower ends
+  setTimeout(() => container.replaceChildren(), (maxEnd + 1) * 1000);
+}
 
 // ---------- Sparkles ----------
 (function generateSparkles() {
@@ -49,6 +56,7 @@ function openInvitation() {
   if (envelope.classList.contains('opening')) return;
   envelope.classList.add('opening');
   document.body.classList.add('invitation-open');
+  startFlowerShower();
   setTimeout(() => {
     envelope.classList.add('opened');
     card.setAttribute('aria-hidden', 'false');
@@ -67,11 +75,6 @@ function revealSequentially() {
   const items = document.querySelectorAll('.card .reveal');
   items.forEach((el, i) => setTimeout(() => el.classList.add('visible'), 120 * i));
 }
-
-// Auto-open envelope after a short delay if user doesn't tap
-setTimeout(() => {
-  if (!envelope.classList.contains('opening')) openInvitation();
-}, 3500);
 
 // ---------- Countdown ----------
 (function countdown() {

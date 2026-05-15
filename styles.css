@@ -77,8 +77,16 @@ body { padding: var(--safe-top) 0 var(--safe-bottom); }
   position: fixed;
   inset: 0;
   pointer-events: none;
-  z-index: -1;
   overflow: hidden;
+}
+.petals {
+  /* Flowers rain IN FRONT of the card, but below envelope (z=50) */
+  z-index: 100;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+.sparkles {
+  z-index: -1;
   opacity: 0;
   transition: opacity 1.4s ease;
 }
@@ -87,29 +95,36 @@ body.invitation-open .sparkles { opacity: 1; }
 
 .petal {
   position: absolute;
-  top: -80px;
-  width: 30px;
-  height: 30px;
+  top: 0;
+  width: 36px;
+  height: 36px;
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
-  opacity: 0.95;
-  animation: fall linear infinite;
-  will-change: transform;
-  filter: drop-shadow(0 3px 5px rgba(168, 116, 99, 0.35));
+  opacity: 0;
+  animation: fall linear forwards;
+  will-change: transform, opacity;
+  filter: drop-shadow(0 4px 6px rgba(168, 116, 99, 0.30));
 }
-/* Five vibrant flower variants */
-.petal.f1 { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><g><circle cx='32' cy='14' r='12' fill='%23ec6b8a'/><circle cx='50' cy='32' r='12' fill='%23e85a7a'/><circle cx='32' cy='50' r='12' fill='%23ec6b8a'/><circle cx='14' cy='32' r='12' fill='%23e85a7a'/><circle cx='32' cy='32' r='8' fill='%23f5d76e'/></g></svg>"); }
-.petal.f2 { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><g><ellipse cx='32' cy='12' rx='9' ry='15' fill='%23ff8fa3'/><ellipse cx='52' cy='32' rx='15' ry='9' fill='%23ff8fa3'/><ellipse cx='32' cy='52' rx='9' ry='15' fill='%23ff8fa3'/><ellipse cx='12' cy='32' rx='15' ry='9' fill='%23ff8fa3'/><ellipse cx='18' cy='18' rx='10' ry='10' fill='%23ffb3c1' transform='rotate(45 18 18)'/><ellipse cx='46' cy='18' rx='10' ry='10' fill='%23ffb3c1' transform='rotate(-45 46 18)'/><ellipse cx='46' cy='46' rx='10' ry='10' fill='%23ffb3c1' transform='rotate(45 46 46)'/><ellipse cx='18' cy='46' rx='10' ry='10' fill='%23ffb3c1' transform='rotate(-45 18 46)'/><circle cx='32' cy='32' r='8' fill='%23f5d76e'/></g></svg>"); }
-.petal.f3 { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><g><path d='M32 4c-7 9-7 16 0 25 7-9 7-16 0-25z' fill='%23a87463'/><path d='M60 32c-9-7-16-7-25 0 9 7 16 7 25 0z' fill='%23a87463'/><path d='M32 60c7-9 7-16 0-25-7 9-7 16 0 25z' fill='%23a87463'/><path d='M4 32c9 7 16 7 25 0-9-7-16-7-25 0z' fill='%23a87463'/><circle cx='32' cy='32' r='7' fill='%239c7d44'/></g></svg>"); }
-.petal.f4 { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><g transform='translate(32 32)'><g><ellipse cx='0' cy='-20' rx='8' ry='14' fill='%23d6336c'/></g><g transform='rotate(72)'><ellipse cx='0' cy='-20' rx='8' ry='14' fill='%23d6336c'/></g><g transform='rotate(144)'><ellipse cx='0' cy='-20' rx='8' ry='14' fill='%23d6336c'/></g><g transform='rotate(216)'><ellipse cx='0' cy='-20' rx='8' ry='14' fill='%23d6336c'/></g><g transform='rotate(288)'><ellipse cx='0' cy='-20' rx='8' ry='14' fill='%23d6336c'/></g><circle r='7' fill='%23f5d76e'/></g></svg>"); }
-.petal.f5 { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><g><path d='M32 4 C 38 18 46 22 60 22 C 46 26 40 36 38 60 C 32 46 26 42 4 42 C 18 36 24 26 32 4 Z' fill='%23c44569'/><circle cx='32' cy='30' r='7' fill='%23f5d76e'/></g></svg>"); }
+/* Simple 5-petal cherry blossoms — three pink shades */
+.petal.f1 {
+  /* Bright pink */
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><g transform='translate(32 32)'><g fill='%23ec4f8a'><ellipse cx='0' cy='-16' rx='10' ry='13'/><ellipse cx='0' cy='-16' rx='10' ry='13' transform='rotate(72)'/><ellipse cx='0' cy='-16' rx='10' ry='13' transform='rotate(144)'/><ellipse cx='0' cy='-16' rx='10' ry='13' transform='rotate(216)'/><ellipse cx='0' cy='-16' rx='10' ry='13' transform='rotate(288)'/></g><circle r='4' fill='%23fff5b0'/></g></svg>");
+}
+.petal.f2 {
+  /* Soft pink */
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><g transform='translate(32 32)'><g fill='%23f7a2c0'><ellipse cx='0' cy='-16' rx='10' ry='13'/><ellipse cx='0' cy='-16' rx='10' ry='13' transform='rotate(72)'/><ellipse cx='0' cy='-16' rx='10' ry='13' transform='rotate(144)'/><ellipse cx='0' cy='-16' rx='10' ry='13' transform='rotate(216)'/><ellipse cx='0' cy='-16' rx='10' ry='13' transform='rotate(288)'/></g><circle r='4' fill='%23fff5b0'/></g></svg>");
+}
+.petal.f3 {
+  /* Magenta */
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><g transform='translate(32 32)'><g fill='%23d63384'><ellipse cx='0' cy='-16' rx='10' ry='13'/><ellipse cx='0' cy='-16' rx='10' ry='13' transform='rotate(72)'/><ellipse cx='0' cy='-16' rx='10' ry='13' transform='rotate(144)'/><ellipse cx='0' cy='-16' rx='10' ry='13' transform='rotate(216)'/><ellipse cx='0' cy='-16' rx='10' ry='13' transform='rotate(288)'/></g><circle r='4' fill='%23fff5b0'/></g></svg>");
+}
 @keyframes fall {
-  0%   { transform: translate3d(0, -10vh, 0) rotate(0deg);   opacity: 0; }
+  0%   { transform: translate3d(0, -15vh, 0) rotate(0deg);    opacity: 0; }
   10%  { opacity: 1; }
-  50%  { transform: translate3d(60px, 50vh, 0) rotate(360deg); }
+  50%  { transform: translate3d(40px, 50vh, 0) rotate(360deg); opacity: 1; }
   90%  { opacity: 1; }
-  100% { transform: translate3d(120px, 110vh, 0) rotate(900deg); opacity: 0; }
+  100% { transform: translate3d(80px, 115vh, 0) rotate(720deg); opacity: 0; }
 }
 
 .sparkle {
