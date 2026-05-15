@@ -41,11 +41,12 @@ body { padding: var(--safe-top) 0 var(--safe-bottom); }
   width: 60vmax;
   height: 60vmax;
   border-radius: 50%;
-  filter: blur(80px);
+  filter: blur(40px);
   opacity: 0.45;
   z-index: -2;
   pointer-events: none;
   will-change: transform;
+  transform: translateZ(0); /* force own GPU layer so blur is cached, not recomputed per frame */
 }
 .bg-glow-1 {
   background: radial-gradient(circle, var(--rose-soft), transparent 60%);
@@ -104,7 +105,8 @@ body.invitation-open .sparkles { opacity: 1; }
   opacity: 0;
   animation: fall linear forwards;
   will-change: transform, opacity;
-  filter: drop-shadow(0 4px 6px rgba(168, 116, 99, 0.30));
+  /* drop-shadow on every petal at 30-50 nodes is expensive on mobile; kept light */
+  filter: drop-shadow(0 2px 3px rgba(168, 116, 99, 0.25));
 }
 /* Simple 5-petal cherry blossoms — three pink shades */
 .petal.f1 {
@@ -153,7 +155,11 @@ body.invitation-open .sparkles { opacity: 1; }
   perspective: 900px;
   animation: envFloat 4s ease-in-out infinite;
   transition: opacity 0.6s ease, transform 0.8s ease;
-  filter: drop-shadow(0 18px 55px rgba(100,80,40,0.16)) drop-shadow(0 4px 12px rgba(100,80,40,0.08));
+  /* box-shadow on the wrapper acts like the previous drop-shadow but is much cheaper */
+  box-shadow:
+    0 18px 55px rgba(100,80,40,0.16),
+    0 4px 12px rgba(100,80,40,0.08);
+  border-radius: 3px;
 }
 .envelope.opening { animation: none; }
 .envelope.opened {
@@ -291,9 +297,9 @@ body.invitation-open .sparkles { opacity: 1; }
   max-width: 720px;
   margin: 4vh auto;
   padding: clamp(28px, 6vw, 56px) clamp(20px, 5vw, 40px) clamp(28px, 5vw, 48px);
-  background: rgba(255, 252, 247, 0.78);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  /* Opaque background — backdrop-filter blur was the biggest mobile perf killer
+     during the envelope→card transition (full-screen GPU blur every frame). */
+  background: #FFFCF7;
   border: 1px solid rgba(201, 169, 110, 0.35);
   border-radius: 12px;
   box-shadow:
@@ -478,12 +484,11 @@ body.invitation-open .sparkles { opacity: 1; }
 .map-btn {
   margin-top: 10px;
   color: var(--rose-deep);
-  background: rgba(255, 252, 247, 0.65);
+  background: rgba(255, 252, 247, 0.92);
   border: 1.5px solid var(--gold);
   box-shadow:
     0 1px 0 rgba(255,255,255,0.8) inset,
     0 6px 16px -10px rgba(58,46,42,0.4);
-  backdrop-filter: blur(4px);
 }
 .map-btn:hover {
   background: rgba(255, 252, 247, 0.95);
@@ -664,6 +669,12 @@ body.invitation-open .sparkles { opacity: 1; }
   .cd-label { font-size: 0.6rem; letter-spacing: 0.14em; }
   .map-btn, .ghost-btn { width: 100%; }
   .action-row { flex-direction: column; }
+
+  /* Mobile perf: stop animating expensive paint-bound backgrounds */
+  .bg-gradient { animation: none; background: linear-gradient(135deg, #fbf6f0, #f3e2d3); }
+  .bg-glow-1, .bg-glow-2 { animation: none; filter: blur(30px); opacity: 0.35; }
+  .petal { filter: none; } /* shadow off on mobile, ~50% paint cost off */
+  .envelope { animation: none; } /* gentle float is also a constant compositor cost */
 }
 
 @media (max-width: 360px) {

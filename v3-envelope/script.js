@@ -8,7 +8,7 @@ function startFlowerShower() {
   const container = document.querySelector('.petals');
   if (!container || container.dataset.started) return;
   container.dataset.started = '1';
-  const count = isMobile ? 30 : 50;
+  const count = isMobile ? 16 : 50;
   const variants = ['f1', 'f2', 'f3'];
   let maxEnd = 0;
   for (let i = 0; i < count; i++) {
@@ -33,7 +33,7 @@ function startFlowerShower() {
 (function generateSparkles() {
   if (reduceMotion) return;
   const container = document.querySelector('.sparkles');
-  const count = isMobile ? 14 : 28;
+  const count = isMobile ? 6 : 28;
   for (let i = 0; i < count; i++) {
     const s = document.createElement('span');
     s.className = 'sparkle';
